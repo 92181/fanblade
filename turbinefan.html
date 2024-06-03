@@ -1,0 +1,366 @@
+<!doctype html><html><head><title>3D Render View</title><style>html,body,canvas{margin:0;width:100%;height:100%;image-rendering:optimizespeed;background:#000}</style></head><body><script src="three.js"></script>
+<script>
+  ip=Math.PI*2;
+  
+  function f1(){t1=1-i;t2=t1*t1;t3=i*i;m0=t2*t1;m1=3*i*t2;m2=3*t3*t1;m3=t3*i;mx=m0*x0+m1*x1+m2*x2+m3*x3;my=m0*y0+m1*y1+m2*y2+m3*y3}
+
+  Rf=[];Rl=0;Cv=[];Cf=[];i4=i0=0;
+
+  /* 
+    Settings...
+
+    Fanblades, Resolution Cover, Start Height Fanblades, Start Height Cover, End Height Cover, Circumfence Outer Cover, Start Bottom Cover, 
+    Resolution Width, Horizontal Size Fanblades, Cover Width, Circumfence Inner Cover, End Height Inner Cover, Fan Circumfence, Fanblade Resolution;
+  */
+
+  qp=12;ia=10;qr=2;ql=16;qf=30;qk=18;qt=0;ij=i9=20;qh=5;qs=1;qw=45-qk;qm=40;
+  qd=qk-qs;qn=qf-qs;qo=ql-qr;ix=(ia-2)*qp+qp;qy=(1/ix*ip)*(qh-1)/(ij-1);
+
+  // Fanblade Curve
+  function f2(){x0=0;y0=0;x1=0.83+0.5*iv;y1=0.16*iu;x2=1+0.33*iv;y2=0.66*iu;x3=1.66;y3=1}
+
+  // Inner Turbine Cover;
+  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=15;ix=(ia-2)*qp+qp;i6=qv=i0/3;
+
+  do
+  {
+    iy=qt+(qn-qt)/(ik-1)*id;i=iy/qn;f1();i5=qd-mx*qd;ir=0;
+
+    do
+    {
+      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+      i0+=3;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  }
+  while(id<ik);
+  
+  Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qn;i0+=3;
+
+  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  {
+    ir=0;do
+    {
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+      z5+=1;i2+=1;i4+=6;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  }
+  while(id<ik-1);i4-=3;
+
+  ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+
+  // Bottom Turbine Cover;
+  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=2;i6=i0/3;
+
+  while(id<ik)
+  {
+    iy=qt+(qr-qt)/ik*(id);i=iy/qf;f1();i5=qk-mx*qk;ir=0;
+
+    do
+    {
+      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+      i0+=3;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  };
+
+  qj=qc=i0/3-ix;qc+=qh;
+
+  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  {
+    ir=0;do
+    {
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+      z5+=1;i2+=1;i4+=6;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  }
+  while(id<ik-1);i4-=3;
+
+  // Connect Inner Turbine Cover And Bottom;
+  z3=qv;z4=i6;ir=0;while(ir<ix-1)
+  {
+    Cf[i4]=z3;Cf[i4+1]=z4+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+1;
+    z3+=1;z4+=1;i4+=6;ir+=1;
+  };
+
+  Cf[i4]=z3;Cf[i4+1]=i6;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=i6;Cf[i4+5]=qv;i4+=6;
+
+  // Top Turbine Cover;
+  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=1;ik=15;ix=(ia-2)*qp+qp;i6=qi=q9=i0/3;q9+=1;
+
+  do
+  {
+    // Calculate Height, Then Calculate Circumfence Using Height (Curve);
+    iy=ql+(qf-ql)/ik*id;i=iy/qf;f1();i5=qk-mx*qk;ir=0;
+
+    do
+    {
+      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+      i0+=3;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  }
+  while(id<ik);
+  
+  Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qf;i0+=3;
+
+  // Create Turbine Ring Top Surfaces;
+  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  {
+    ir=0;do
+    {
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+      z5+=1;i2+=1;i4+=6;ir+=1;
+    }
+    while(ir<ix);id+=1;
+  }
+  while(id<ik-1);i4-=3;
+
+  // Top Outer Turbine Cover (Close Top With 1 Point);
+  ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+
+  // Turbine Blades;
+  q8=i0/3;id=0;ix=qm;do
+  {
+    z0=q3=i8=i6=qx=i0/3;z1=z0+ij;ih=ij-2;
+    
+    ir=0;do
+    {
+      b=ir/(ix-1);ic=0;do
+      {
+        // Calculate Height Of Vertice;
+        x0=0;y0=0;x1=0.83;y1=0.16;x2=1;y2=0.66;x3=1.66;y3=1;i=ic/(ij-1);f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
+
+        // Set Circumfence Of Circle & Position;
+        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
+        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
+
+        il=id/qp*ip+ic*(qy+my*0.01)+qa;
+
+        // Cover Curve (Gradually Decreases In Importance Near The End);
+        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+        ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
+
+        ic+=1;i0+=3;
+      }
+      while(ic<ij);
+
+      ir+=1;
+    }
+    while(ir<ix);
+
+    qe=i6+ij-1;
+
+    ir=0;do
+    {
+      i7=i4+(ij-1)*6;do
+      {
+        Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1;
+        i4+=6;z0+=1;z1+=1;
+      }
+      while(i4<i7);
+
+      z0+=1;z1+=1;ir+=1;
+    }
+    while(ir<(ix-1));
+
+    // Turbine Blade (Second Plane - Width);
+    im=i0;z0=im/3;z1=z0+ij-2;
+
+    ir=0;while(ir<ix-1)
+    {
+      // Smoothing Curve;
+      b=i=ir/(ix-1);x0=0;y0=0;x1=6;y1=0;x2=9;y2=0;x3=10;y3=1;f1();iu=my;iv=1-my; // Change this for thicker fan blade near end?!
+
+      ic=1;do
+      {
+        i=ic/(ij-1);
+
+        // Calculate Height Of Vertice;
+        f2();f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
+        
+        // Set Circumfence Of Circle & Position;
+        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
+        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
+
+        il=id/qp*ip+ic*(qy+my*0.01)+qa;
+
+        // Cover Curve (Gradually Decreases In Importance Near The End);
+        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+        ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
+
+        ic+=1;i0+=3;
+      }
+      while(ic<ij-1);
+
+      ir+=1;
+    };
+
+    ir=0;do
+    {
+      i7=i4+(ih-1)*6;do
+      {
+        Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1; 
+        i4+=6;z0+=1;z1+=1;
+      }
+      while(i4<i7);
+
+      z0+=1;z1+=1;ir+=1;
+    }
+    while(ir<ix-2);
+
+    // Connect The 2 Planes;
+    z0=im/3;z1=z0+ih-1;z2=i8+i9-1;
+
+    ir=0;do
+    {
+      // Connect Frontside;
+      Cf[i4]=z0;Cf[i4+1]=z0+ih;Cf[i4+2]=i8;Cf[i4+3]=i8;Cf[i4+4]=i8+i9;Cf[i4+5]=z0+ih;
+      z0+=ih;i8+=i9;i4+=6;
+
+      // Connect Backside;
+      Cf[i4]=z1;Cf[i4+1]=z1+ih;Cf[i4+2]=z2;Cf[i4+3]=z1+ih;Cf[i4+4]=z2;Cf[i4+5]=z2+i9; 
+      z1+=ih;z2+=i9;i4+=6;ir+=1;
+    }
+    while(ir<ix-2);
+
+    // Connect Mainside & Corners;
+    z3=i8+ih*ix+3;z4=i6+i9*(ix-1);
+
+    Cf[i4]=z4+1;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z4-i9;Cf[i4+4]=z3+1;Cf[i4+5]=z4;i4+=6;
+    Cf[i4]=z4-1;Cf[i4+1]=z3+ih;Cf[i4+2]=z4+i9-1;Cf[i4+3]=z4+i9-2;Cf[i4+4]=z3+ih;Cf[i4+5]=z4+i9-1;i4+=6;
+
+    z3+=1;z4+=1;ir=0;while(ir<i9-3)
+    {
+      Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+1;
+      z3+=1;z4+=1;i4+=6;ir+=1;
+    };
+
+    // Middle Turbine Ring;
+    q7=i6=i0;q0=0;q5=(ij-1)*qy;q4=1/qp*ip+q5;q6=(q4-q5)/(ia-1);
+
+    do
+    {
+      ir=1;do
+      {
+        // Calculate Height Of Vertice;
+        iu=ir/(ia-1);iv=1-iu;f2();i=q0/(ij-1);f1();iy=qr+qo-my*qo;
+
+        // Calculate Circle Part Circumfence & Vertice Circle Position;
+        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+        i5=qk-mx*qk;il=id/qp*ip+q0*qy+ir*q6;
+
+        // Set Vertice Positions;
+        Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+
+        i0+=3;ir+=1;
+      }
+      while(ir<ia-1);q0+=1;
+    }
+    while(q0<ij);
+
+    qg=i0/3-(ia-4);
+
+    z5=i6/3;i2=z5+ia-2;q0=0;do
+    {
+      ir=1;do
+      {
+        Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;
+        z5+=1;i2+=1;i4+=6;ir+=1;
+      }
+      while(ir<ia-2);q0+=1;z5+=1;i2+=1;
+    }
+    while(q0<ij-1);
+
+    // Connect Outer Turbine Ring (Left);
+    z3=im/3;z4=i6/3;Cf[i4]=z3;Cf[i4+1]=q3;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;z4+=ia-2;
+
+    ir=0;while(ir<ij-3)
+    {
+      Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+ia-2;
+      z3+=1;z4+=ia-2;i4+=6;ir+=1;
+    };
+
+    Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=q3+ij-1;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;
+
+    // Connect Outer Turbine Ring (Right);
+    z3=z5+ia-2;z4=i6/3+ia-3;if(id==qp-1){z3=q8}
+
+    ir=0;while(ir<ij-1)
+    {
+      Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+ia-2;
+      z3+=1;z4+=ia-2;i4+=6;ir+=1;
+    };
+
+    // Connect Top Turbine Cover And Fan Blade Cover;
+    z5=q7/3;Cf[i4]=q9;Cf[i4+1]=q9-1;Cf[i4+2]=qx;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qx;i4+=6;
+
+    ir=0;while(ir<ia-3)
+    {
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=q9;Cf[i4+3]=z5+1;Cf[i4+4]=q9+1;Cf[i4+5]=q9;
+      z5+=1;q9+=1;i4+=6;ir+=1;
+    };
+
+    if(id==qp-1){qz=q8;qu=qi;}else{qz=i0/3;qu=q9+1;}Cf[i4]=q9;Cf[i4+1]=qu;Cf[i4+2]=qz;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;q9+=2;
+
+    // Connect Bottom Turbine Cover And Fan Blade Cover;
+    z5=qg-2;Cf[i4]=qc;Cf[i4+1]=qc-1;Cf[i4+2]=qe;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qe;i4+=6;
+
+    ir=0;while(ir<ia-3)
+    {
+      if(id==qp-1&&ir==ia-3-qh+1)
+      {
+        Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qj;Cf[i4+5]=qc;
+        i4+=6;qc=qj;ir+=1;z5+=1
+      }
+      
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qc+1;Cf[i4+5]=qc;
+      z5+=1;qc+=1;i4+=6;ir+=1;
+    };
+    
+    if(id==qp-1){qz=q8+ij-1}else{qz=i0/3+ij-1}Cf[i4]=qc;Cf[i4+1]=qc+1;Cf[i4+2]=qz;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;qc+=2;
+
+    id+=1;
+  }
+  while(id<qp);
+
+  // Resizing & Movement;
+  let gx=0.5,g0,g1,g2,g3,g4,g5;let rty=0,rtx=0;r6=0.3;document.body.onmousedown=function(){document.body.requestPointerLock();document.body.onmousemove=move};document.onpointerlockchange=function(){if(!document.pointerLockElement){document.body.onmousemove=0}};
+  function move(e){kh.y-=e.movementX*0.007;kh.x=Math.max(kj-Math.PI,Math.min(kj,kh.x-e.movementY*0.007));camera.quaternion.setFromEuler(kh)}kh=new THREE.Euler(0,0,0,'YXZ');kj=Math.PI/2;
+
+  // Setup Renderer;
+  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.6,1200);camera.position.z=100;r0=new THREE.WebGLRenderer({antialias:true});r0.setClearColor("#000");document.body.appendChild(r0.domElement);r0.setPixelRatio(window.devicePixelRatio);
+  window.onresize=f0;function f0(){d0=window.innerWidth;d1=window.innerHeight;d2=d0/2,d3=d1/2;r0.setSize(d0,d1);camera.aspect=d0/d1;camera.updateProjectionMatrix()};f0();light=new THREE.PointLight(0xffffff,1);scene.add(light);
+
+  // Add Vertices And Triangles To Geometry;
+  geometry=new THREE.BufferGeometry();r4=[];i=b=0;while(b!=Cf.length){l0=Cf[b]*3;l1=Cf[b+1]*3;l2=Cf[b+2]*3;r4[i]=Cv[l0];r4[i+1]=Cv[l0+1];r4[i+2]=Cv[l0+2];r4[i+3]=Cv[l1];r4[i+4]=Cv[l1+1];r4[i+5]=Cv[l1+2];r4[i+6]=Cv[l2];r4[i+7]=Cv[l2+1];r4[i+8]=Cv[l2+2];i+=9;b+=3};
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(r4,3));geometry.computeVertexNormals();scene.add(new THREE.Mesh(geometry,new THREE.MeshPhongMaterial({side:THREE.DoubleSide,color:0xffffff})));
+
+  // Rendering;
+  function r3()
+  {
+    // Apply Camera Movement;
+    if(g0){camera.translateZ(-gx)}if(g1){camera.translateZ(gx)}if(g2){camera.translateX(-gx)}if(g3){camera.translateX(gx)}if(g4){camera.translateY(gx)}if(g5){camera.translateY(-gx)}
+    light.position.x=camera.position.x;light.position.y=camera.position.y;light.position.z=camera.position.z;
+
+    // Render;
+    r0.render(scene,camera);requestAnimationFrame(r3);
+  }
+
+  // Export Data To STL Function;
+  function r2()
+  {
+    pp="solid FAN\n";i=0;while(i!=Cf.length)
+    {
+      l0=Cf[i]*3;l1=Cf[i+1]*3;l2=Cf[i+2]*3;i+=3;
+      pp+="outer loop\nvertex "+Cv[l0]+" "+Cv[l0+1]+" "+Cv[l0+2]+"\nvertex "+Cv[l1]+" "+Cv[l1+1]+" "+Cv[l1+2]+"\nvertex "+Cv[l2]+" "+Cv[l2+1]+" "+Cv[l2+2]+"\nend loop\n";
+    };
+
+    pp+="endsolid FAN\n";file=new Blob([pp],{type:'text/plain'});a=document.createElement("a"),url=URL.createObjectURL(file);a.href=url;a.download='fan.stl';document.body.appendChild(a);a.click();document.body.removeChild(a);window.URL.revokeObjectURL(url);  
+  }
+  
+  document.onkeydown=function(k){switch(k.code){case"ShiftLeft":{gx=1;break}case"KeyW":{g0=1;break}case"KeyS":{g1=1;break}case"KeyA":{g2=1;break}case"KeyD":{g3=1;break}case"KeyQ":{g4=1;break}case"KeyE":{g5=1;break}case"KeyP":{r2();break}}};
+  document.onkeyup=function(k){switch(k.code){case"ShiftLeft":{gx=0.5;break}case"KeyW":{g0=0;break}case"KeyS":{g1=0;break}case"KeyA":{g2=0;break}case"KeyD":{g3=0;break}case"KeyQ":{g4=0;break}case"KeyE":{g5=0;break}}};r3();
+</script></body></html>
