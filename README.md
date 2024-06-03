@@ -8,7 +8,8 @@ Various things that can be done are...
 * The final result can be easily exported to an STL file, to do this you need to press the p key.
 
 # Pictures
--
+![screenshot](images/0.png)
+![screenshot](images/1.png)
 
 # License
 This project uses the MIT Attribution license.
