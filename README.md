@@ -8,12 +8,10 @@ Various things that can be done are...
 * The final result can be easily exported to an STL file, to do this you need to press the p key.
 
 # Pictures
-//![screenshot](images/0.png) ![screenshot](images/1.png)
-
 <p align="center">
-  <img src="./images/0.png" width="45%">
+  <img src="./images/0.png" width="48%">
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="./images/1.png" width="45%">
+  <img src="./images/1.png" width="48%">
 </p>
 
 # License
