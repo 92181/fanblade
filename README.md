@@ -9,9 +9,9 @@ Various things that can be done are...
 
 # Pictures
 <p align="center">
-  <img src="./images/0.png" width="46%">
+  <img src="./images/0.png" width="45%">
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="./images/1.png" width="46%">
+  <img src="./images/1.png" width="45%">
 </p>
 
 # License
