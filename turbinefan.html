@@ -352,13 +352,18 @@
   // Export Data To STL Function;
   function r2()
   {
-    pp="solid FAN\n";i=0;while(i!=Cf.length)
-    {
-      l0=Cf[i]*3;l1=Cf[i+1]*3;l2=Cf[i+2]*3;i+=3;
-      pp+="outer loop\nvertex "+Cv[l0]+" "+Cv[l0+1]+" "+Cv[l0+2]+"\nvertex "+Cv[l1]+" "+Cv[l1+1]+" "+Cv[l1+2]+"\nvertex "+Cv[l2]+" "+Cv[l2+1]+" "+Cv[l2+2]+"\nend loop\n";
-    };
+    cf=r4;i4=r4.length;j=new DataView(new ArrayBuffer(80+4+(50*i4/9)));j.setUint32(80,i4/9,1);z=84;
 
-    pp+="endsolid FAN\n";file=new Blob([pp],{type:'text/plain'});a=document.createElement("a"),url=URL.createObjectURL(file);a.href=url;a.download='fan.stl';document.body.appendChild(a);a.click();document.body.removeChild(a);window.URL.revokeObjectURL(url);  
+    i=0;while(i<i4)
+    {
+      j.setFloat32(z+12,cf[i],1);j.setFloat32(z+16,cf[i+1],1);j.setFloat32(z+20,cf[i+2],1);
+      j.setFloat32(z+24,cf[i+3],1);j.setFloat32(z+28,cf[i+4],1);j.setFloat32(z+32,cf[i+5],1);
+      j.setFloat32(z+36,cf[i+6],1);j.setFloat32(z+40,cf[i+7],1);j.setFloat32(z+44,cf[i+8],1);
+
+      i+=9;z+=50;
+    }
+
+    a=document.createElement('a');a.href=url=URL.createObjectURL(new Blob([j],{type:'application/octet-stream'}));a.download='export.stl';a.click();URL.revokeObjectURL(url);
   }
   
   document.onkeydown=function(k){switch(k.code){case"ShiftLeft":{gx=1;break}case"KeyW":{g0=1;break}case"KeyS":{g1=1;break}case"KeyA":{g2=1;break}case"KeyD":{g3=1;break}case"KeyQ":{g4=1;break}case"KeyE":{g5=1;break}case"KeyP":{r2();break}}};
