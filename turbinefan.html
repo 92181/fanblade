@@ -1,371 +1,709 @@
-<!doctype html><html><head><title>3D Render View</title><style>html,body,canvas{margin:0;width:100%;height:100%;image-rendering:optimizespeed;background:#000}</style></head><body><script src="three.js"></script>
+<!doctype html>
+<html>
+<head>
+  <title>WebGPU - Fanblade</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas></canvas>
 <script>
-  ip=Math.PI*2;
-  
-  function f1(){t1=1-i;t2=t1*t1;t3=i*i;m0=t2*t1;m1=3*i*t2;m2=3*t3*t1;m3=t3*i;mx=m0*x0+m1*x1+m2*x2+m3*x3;my=m0*y0+m1*y1+m2*y2+m3*y3}
+// Bezier Curve Function;
+function f1(){t1=1-i;t2=t1*t1;t3=i*i;m0=t2*t1;m1=3*i*t2;m2=3*t3*t1;m3=t3*i;mx=m0*x0+m1*x1+m2*x2+m3*x3;my=m0*y0+m1*y1+m2*y2+m3*y3}
 
-  Rf=[];Rl=0;Cv=[];Cf=[];i4=i0=0;
+let ip=Math.PI*2,Rf=[],Rl=0,Cv=[],Cf=[],i4=0,i0=0;
 
-  /* 
-    Settings...
+/* 
+  Settings...
 
-    Fanblades, Resolution Cover, Start Height Fanblades, Start Height Cover, End Height Cover, Circumfence Outer Cover, Start Bottom Cover, 
-    Resolution Width, Horizontal Size Fanblades, Cover Width, Circumfence Inner Cover, End Height Inner Cover, Fan Circumfence, Fanblade Resolution;
-  */
+  Fanblades, Resolution Cover, Start Height Fanblades, Start Height Cover, End Height Cover, Circumfence Outer Cover, Start Bottom Cover, 
+  Resolution Width, Horizontal Size Fanblades, Cover Width, Circumfence Inner Cover, End Height Inner Cover, Fan Circumfence, Fanblade Resolution;
+*/
 
-  qp=12;ia=10;qr=2;ql=16;qf=30;qk=18;qt=0;ij=i9=20;qh=5;qs=1;qw=45-qk;qm=40;
-  qd=qk-qs;qn=qf-qs;qo=ql-qr;ix=(ia-2)*qp+qp;qy=(1/ix*ip)*(qh-1)/(ij-1);
+qp=12;ia=10;qr=2;ql=16;qf=30;qk=18;qt=0;ij=i9=20;qh=5;qs=1;qw=45-qk;qm=40;
+qd=qk-qs;qn=qf-qs;qo=ql-qr;ix=(ia-2)*qp+qp;qy=(1/ix*ip)*(qh-1)/(ij-1);
 
-  // Fanblade Curve
-  function f2(){x0=0;y0=0;x1=0.83+0.5*iv;y1=0.16*iu;x2=1+0.33*iv;y2=0.66*iu;x3=1.66;y3=1}
+// Fanblade Curve
+function f2(){x0=0;y0=0;x1=0.83+0.5*iv;y1=0.16*iu;x2=1+0.33*iv;y2=0.66*iu;x3=1.66;y3=1}
 
-  // Inner Turbine Cover;
-  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=15;ix=(ia-2)*qp+qp;i6=qv=i0/3;
+// Inner Turbine Cover;
+x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=15;ix=(ia-2)*qp+qp;i6=qv=i0/3;
+
+do
+{
+  iy=qt+(qn-qt)/(ik-1)*id;i=iy/qn;f1();i5=qd-mx*qd;ir=0;
 
   do
   {
-    iy=qt+(qn-qt)/(ik-1)*id;i=iy/qn;f1();i5=qd-mx*qd;ir=0;
-
-    do
-    {
-      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
-      i0+=3;ir+=1;
-    }
-    while(ir<ix);id+=1;
+    il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+    i0+=3;ir+=1;
   }
-  while(id<ik);
+  while(ir<ix);id+=1;
+}
+while(id<ik);
+
+Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qn;i0+=3;
+
+z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+{
+  ir=0;do
+  {
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    z5+=1;i2+=1;i4+=6;ir+=1;
+  }
+  while(ir<ix);id+=1;
+}
+while(id<ik-1);i4-=3;
+
+ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+
+// Bottom Turbine Cover;
+x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=2;i6=i0/3;
+
+while(id<ik)
+{
+  iy=qt+(qr-qt)/ik*(id);i=iy/qf;f1();i5=qk-mx*qk;ir=0;
+
+  do
+  {
+    il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+    i0+=3;ir+=1;
+  }
+  while(ir<ix);id+=1;
+};
+
+qj=qc=i0/3-ix;qc+=qh;
+
+z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+{
+  ir=0;do
+  {
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    z5+=1;i2+=1;i4+=6;ir+=1;
+  }
+  while(ir<ix);id+=1;
+}
+while(id<ik-1);i4-=3;
+
+// Connect Inner Turbine Cover And Bottom;
+z3=qv;z4=i6;ir=0;while(ir<ix-1)
+{
+  Cf[i4]=z3;Cf[i4+1]=z4+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+1;
+  z3+=1;z4+=1;i4+=6;ir+=1;
+};
+
+Cf[i4]=z3;Cf[i4+1]=i6;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=i6;Cf[i4+5]=qv;i4+=6;
+
+// Top Turbine Cover;
+x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=1;ik=15;ix=(ia-2)*qp+qp;i6=qi=q9=i0/3;q9+=1;
+
+do
+{
+  // Calculate Height, Then Calculate Circumfence Using Height (Curve);
+  iy=ql+(qf-ql)/ik*id;i=iy/qf;f1();i5=qk-mx*qk;ir=0;
+
+  do
+  {
+    il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+    i0+=3;ir+=1;
+  }
+  while(ir<ix);id+=1;
+}
+while(id<ik);
+
+Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qf;i0+=3;
+
+// Create Turbine Ring Top Surfaces;
+z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+{
+  ir=0;do
+  {
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    z5+=1;i2+=1;i4+=6;ir+=1;
+  }
+  while(ir<ix);id+=1;
+}
+while(id<ik-1);i4-=3;
+
+// Top Outer Turbine Cover (Close Top With 1 Point);
+ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+
+// Turbine Blades;
+q8=i0/3;id=0;ix=qm;do
+{
+  z0=q3=i8=i6=qx=i0/3;z1=z0+ij;ih=ij-2;
   
-  Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qn;i0+=3;
-
-  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  ir=0;do
   {
-    ir=0;do
+    b=ir/(ix-1);ic=0;do
     {
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
-      z5+=1;i2+=1;i4+=6;ir+=1;
+      // Calculate Height Of Vertice;
+      x0=0;y0=0;x1=0.83;y1=0.16;x2=1;y2=0.66;x3=1.66;y3=1;i=ic/(ij-1);f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
+
+      // Set Circumfence Of Circle & Position;
+      x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
+      x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
+
+      il=id/qp*ip+ic*(qy+my*0.01)+qa;
+
+      // Cover Curve (Gradually Decreases In Importance Near The End);
+      x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+      ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
+
+      ic+=1;i0+=3;
     }
-    while(ir<ix);id+=1;
+    while(ic<ij);
+
+    ir+=1;
   }
-  while(id<ik-1);i4-=3;
+  while(ir<ix);
 
-  ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+  qe=i6+ij-1;
 
-  // Bottom Turbine Cover;
-  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=2;i6=i0/3;
-
-  while(id<ik)
+  ir=0;do
   {
-    iy=qt+(qr-qt)/ik*(id);i=iy/qf;f1();i5=qk-mx*qk;ir=0;
-
-    do
+    i7=i4+(ij-1)*6;do
     {
-      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
-      i0+=3;ir+=1;
+      Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1;
+      i4+=6;z0+=1;z1+=1;
     }
-    while(ir<ix);id+=1;
+    while(i4<i7);
+
+    z0+=1;z1+=1;ir+=1;
+  }
+  while(ir<(ix-1));
+
+  // Turbine Blade (Second Plane - Width);
+  im=i0;z0=im/3;z1=z0+ij-2;
+
+  ir=0;while(ir<ix-1)
+  {
+    // Smoothing Curve;
+    b=i=ir/(ix-1);x0=0;y0=0;x1=6;y1=0;x2=9;y2=0;x3=10;y3=1;f1();iu=my;iv=1-my;
+
+    ic=1;do
+    {
+      i=ic/(ij-1);
+
+      // Calculate Height Of Vertice;
+      f2();f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
+      
+      // Set Circumfence Of Circle & Position;
+      x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
+      x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
+
+      il=id/qp*ip+ic*(qy+my*0.01)+qa;
+
+      // Cover Curve (Gradually Decreases In Importance Near The End);
+      x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+      ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
+
+      ic+=1;i0+=3;
+    }
+    while(ic<ij-1);
+
+    ir+=1;
   };
 
-  qj=qc=i0/3-ix;qc+=qh;
-
-  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  ir=0;do
   {
-    ir=0;do
+    i7=i4+(ih-1)*6;do
     {
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
-      z5+=1;i2+=1;i4+=6;ir+=1;
+      Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1; 
+      i4+=6;z0+=1;z1+=1;
     }
-    while(ir<ix);id+=1;
-  }
-  while(id<ik-1);i4-=3;
+    while(i4<i7);
 
-  // Connect Inner Turbine Cover And Bottom;
-  z3=qv;z4=i6;ir=0;while(ir<ix-1)
+    z0+=1;z1+=1;ir+=1;
+  }
+  while(ir<ix-2);
+
+  // Connect The 2 Planes;
+  z0=im/3;z1=z0+ih-1;z2=i8+i9-1;
+
+  ir=0;do
   {
-    Cf[i4]=z3;Cf[i4+1]=z4+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+1;
+    // Connect Frontside;
+    Cf[i4]=z0;Cf[i4+1]=z0+ih;Cf[i4+2]=i8;Cf[i4+3]=i8;Cf[i4+4]=i8+i9;Cf[i4+5]=z0+ih;
+    z0+=ih;i8+=i9;i4+=6;
+
+    // Connect Backside;
+    Cf[i4]=z1;Cf[i4+1]=z1+ih;Cf[i4+2]=z2;Cf[i4+3]=z1+ih;Cf[i4+4]=z2;Cf[i4+5]=z2+i9; 
+    z1+=ih;z2+=i9;i4+=6;ir+=1;
+  }
+  while(ir<ix-2);
+
+  // Connect Mainside & Corners;
+  z3=i8+ih*ix+3;z4=i6+i9*(ix-1);
+
+  Cf[i4]=z4+1;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z4-i9;Cf[i4+4]=z3+1;Cf[i4+5]=z4;i4+=6;
+  Cf[i4]=z4-1;Cf[i4+1]=z3+ih;Cf[i4+2]=z4+i9-1;Cf[i4+3]=z4+i9-2;Cf[i4+4]=z3+ih;Cf[i4+5]=z4+i9-1;i4+=6;
+
+  z3+=1;z4+=1;ir=0;while(ir<i9-3)
+  {
+    Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+1;
     z3+=1;z4+=1;i4+=6;ir+=1;
   };
 
-  Cf[i4]=z3;Cf[i4+1]=i6;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=i6;Cf[i4+5]=qv;i4+=6;
-
-  // Top Turbine Cover;
-  x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=1;ik=15;ix=(ia-2)*qp+qp;i6=qi=q9=i0/3;q9+=1;
+  // Middle Turbine Ring;
+  q7=i6=i0;q0=0;q5=(ij-1)*qy;q4=1/qp*ip+q5;q6=(q4-q5)/(ia-1);
 
   do
   {
-    // Calculate Height, Then Calculate Circumfence Using Height (Curve);
-    iy=ql+(qf-ql)/ik*id;i=iy/qf;f1();i5=qk-mx*qk;ir=0;
-
-    do
+    ir=1;do
     {
-      il=ir/ix*ip;Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+      // Calculate Height Of Vertice;
+      iu=ir/(ia-1);iv=1-iu;f2();i=q0/(ij-1);f1();iy=qr+qo-my*qo;
+
+      // Calculate Circle Part Circumfence & Vertice Circle Position;
+      x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
+      i5=qk-mx*qk;il=id/qp*ip+q0*qy+ir*q6;
+
+      // Set Vertice Positions;
+      Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
+
       i0+=3;ir+=1;
     }
-    while(ir<ix);id+=1;
+    while(ir<ia-1);q0+=1;
   }
-  while(id<ik);
-  
-  Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qf;i0+=3;
+  while(q0<ij);
 
-  // Create Turbine Ring Top Surfaces;
-  z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+  qg=i0/3-(ia-4);
+
+  z5=i6/3;i2=z5+ia-2;q0=0;do
   {
-    ir=0;do
+    ir=1;do
     {
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;
       z5+=1;i2+=1;i4+=6;ir+=1;
     }
-    while(ir<ix);id+=1;
+    while(ir<ia-2);q0+=1;z5+=1;i2+=1;
   }
-  while(id<ik-1);i4-=3;
+  while(q0<ij-1);
 
-  // Top Outer Turbine Cover (Close Top With 1 Point);
-  ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+  // Connect Outer Turbine Ring (Left);
+  z3=im/3;z4=i6/3;Cf[i4]=z3;Cf[i4+1]=q3;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;z4+=ia-2;
 
-  // Turbine Blades;
-  q8=i0/3;id=0;ix=qm;do
+  ir=0;while(ir<ij-3)
   {
-    z0=q3=i8=i6=qx=i0/3;z1=z0+ij;ih=ij-2;
+    Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+ia-2;
+    z3+=1;z4+=ia-2;i4+=6;ir+=1;
+  };
+
+  Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=q3+ij-1;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;
+
+  // Connect Outer Turbine Ring (Right);
+  z3=z5+ia-2;z4=i6/3+ia-3;if(id==qp-1){z3=q8}
+
+  ir=0;while(ir<ij-1)
+  {
+    Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+ia-2;
+    z3+=1;z4+=ia-2;i4+=6;ir+=1;
+  };
+
+  // Connect Top Turbine Cover And Fan Blade Cover;
+  z5=q7/3;Cf[i4]=q9;Cf[i4+1]=q9-1;Cf[i4+2]=qx;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qx;i4+=6;
+
+  ir=0;while(ir<ia-3)
+  {
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=q9;Cf[i4+3]=z5+1;Cf[i4+4]=q9+1;Cf[i4+5]=q9;
+    z5+=1;q9+=1;i4+=6;ir+=1;
+  };
+
+  if(id==qp-1){qz=q8;qu=qi;}else{qz=i0/3;qu=q9+1;}Cf[i4]=q9;Cf[i4+1]=qu;Cf[i4+2]=qz;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;q9+=2;
+
+  // Connect Bottom Turbine Cover And Fan Blade Cover;
+  z5=qg-2;Cf[i4]=qc;Cf[i4+1]=qc-1;Cf[i4+2]=qe;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qe;i4+=6;
+
+  ir=0;while(ir<ia-3)
+  {
+    if(id==qp-1&&ir==ia-3-qh+1)
+    {
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qj;Cf[i4+5]=qc;
+      i4+=6;qc=qj;ir+=1;z5+=1
+    }
     
-    ir=0;do
-    {
-      b=ir/(ix-1);ic=0;do
-      {
-        // Calculate Height Of Vertice;
-        x0=0;y0=0;x1=0.83;y1=0.16;x2=1;y2=0.66;x3=1.66;y3=1;i=ic/(ij-1);f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
-
-        // Set Circumfence Of Circle & Position;
-        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
-        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
-
-        il=id/qp*ip+ic*(qy+my*0.01)+qa;
-
-        // Cover Curve (Gradually Decreases In Importance Near The End);
-        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
-        ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
-
-        ic+=1;i0+=3;
-      }
-      while(ic<ij);
-
-      ir+=1;
-    }
-    while(ir<ix);
-
-    qe=i6+ij-1;
-
-    ir=0;do
-    {
-      i7=i4+(ij-1)*6;do
-      {
-        Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1;
-        i4+=6;z0+=1;z1+=1;
-      }
-      while(i4<i7);
-
-      z0+=1;z1+=1;ir+=1;
-    }
-    while(ir<(ix-1));
-
-    // Turbine Blade (Second Plane - Width);
-    im=i0;z0=im/3;z1=z0+ij-2;
-
-    ir=0;while(ir<ix-1)
-    {
-      // Smoothing Curve;
-      b=i=ir/(ix-1);x0=0;y0=0;x1=6;y1=0;x2=9;y2=0;x3=10;y3=1;f1();iu=my;iv=1-my; // Change this for thicker fan blade near end?!
-
-      ic=1;do
-      {
-        i=ic/(ij-1);
-
-        // Calculate Height Of Vertice;
-        f2();f1();iy=qr+qo-my*qo;Cv[i0+2]=iy;
-        
-        // Set Circumfence Of Circle & Position;
-        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;i=b;f1();qa=my*0.07;
-        x0=0;y0=0;x1=4;y1=0;x2=7;y2=1;x3=10;y3=1;f1();
-
-        il=id/qp*ip+ic*(qy+my*0.01)+qa;
-
-        // Cover Curve (Gradually Decreases In Importance Near The End);
-        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
-        ie=b*qw+qk-(1-b)*mx*qk;Cv[i0]=Math.sin(il)*ie;Cv[i0+1]=Math.cos(il)*ie;
-
-        ic+=1;i0+=3;
-      }
-      while(ic<ij-1);
-
-      ir+=1;
-    };
-
-    ir=0;do
-    {
-      i7=i4+(ih-1)*6;do
-      {
-        Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1; 
-        i4+=6;z0+=1;z1+=1;
-      }
-      while(i4<i7);
-
-      z0+=1;z1+=1;ir+=1;
-    }
-    while(ir<ix-2);
-
-    // Connect The 2 Planes;
-    z0=im/3;z1=z0+ih-1;z2=i8+i9-1;
-
-    ir=0;do
-    {
-      // Connect Frontside;
-      Cf[i4]=z0;Cf[i4+1]=z0+ih;Cf[i4+2]=i8;Cf[i4+3]=i8;Cf[i4+4]=i8+i9;Cf[i4+5]=z0+ih;
-      z0+=ih;i8+=i9;i4+=6;
-
-      // Connect Backside;
-      Cf[i4]=z1;Cf[i4+1]=z1+ih;Cf[i4+2]=z2;Cf[i4+3]=z1+ih;Cf[i4+4]=z2;Cf[i4+5]=z2+i9; 
-      z1+=ih;z2+=i9;i4+=6;ir+=1;
-    }
-    while(ir<ix-2);
-
-    // Connect Mainside & Corners;
-    z3=i8+ih*ix+3;z4=i6+i9*(ix-1);
-
-    Cf[i4]=z4+1;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z4-i9;Cf[i4+4]=z3+1;Cf[i4+5]=z4;i4+=6;
-    Cf[i4]=z4-1;Cf[i4+1]=z3+ih;Cf[i4+2]=z4+i9-1;Cf[i4+3]=z4+i9-2;Cf[i4+4]=z3+ih;Cf[i4+5]=z4+i9-1;i4+=6;
-
-    z3+=1;z4+=1;ir=0;while(ir<i9-3)
-    {
-      Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+1;
-      z3+=1;z4+=1;i4+=6;ir+=1;
-    };
-
-    // Middle Turbine Ring;
-    q7=i6=i0;q0=0;q5=(ij-1)*qy;q4=1/qp*ip+q5;q6=(q4-q5)/(ia-1);
-
-    do
-    {
-      ir=1;do
-      {
-        // Calculate Height Of Vertice;
-        iu=ir/(ia-1);iv=1-iu;f2();i=q0/(ij-1);f1();iy=qr+qo-my*qo;
-
-        // Calculate Circle Part Circumfence & Vertice Circle Position;
-        x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;i=iy/qf;f1();
-        i5=qk-mx*qk;il=id/qp*ip+q0*qy+ir*q6;
-
-        // Set Vertice Positions;
-        Cv[i0]=Math.sin(il)*i5;Cv[i0+1]=Math.cos(il)*i5;Cv[i0+2]=iy;
-
-        i0+=3;ir+=1;
-      }
-      while(ir<ia-1);q0+=1;
-    }
-    while(q0<ij);
-
-    qg=i0/3-(ia-4);
-
-    z5=i6/3;i2=z5+ia-2;q0=0;do
-    {
-      ir=1;do
-      {
-        Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;
-        z5+=1;i2+=1;i4+=6;ir+=1;
-      }
-      while(ir<ia-2);q0+=1;z5+=1;i2+=1;
-    }
-    while(q0<ij-1);
-
-    // Connect Outer Turbine Ring (Left);
-    z3=im/3;z4=i6/3;Cf[i4]=z3;Cf[i4+1]=q3;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;z4+=ia-2;
-
-    ir=0;while(ir<ij-3)
-    {
-      Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+ia-2;
-      z3+=1;z4+=ia-2;i4+=6;ir+=1;
-    };
-
-    Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=q3+ij-1;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;
-
-    // Connect Outer Turbine Ring (Right);
-    z3=z5+ia-2;z4=i6/3+ia-3;if(id==qp-1){z3=q8}
-
-    ir=0;while(ir<ij-1)
-    {
-      Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+ia-2;
-      z3+=1;z4+=ia-2;i4+=6;ir+=1;
-    };
-
-    // Connect Top Turbine Cover And Fan Blade Cover;
-    z5=q7/3;Cf[i4]=q9;Cf[i4+1]=q9-1;Cf[i4+2]=qx;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qx;i4+=6;
-
-    ir=0;while(ir<ia-3)
-    {
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=q9;Cf[i4+3]=z5+1;Cf[i4+4]=q9+1;Cf[i4+5]=q9;
-      z5+=1;q9+=1;i4+=6;ir+=1;
-    };
-
-    if(id==qp-1){qz=q8;qu=qi;}else{qz=i0/3;qu=q9+1;}Cf[i4]=q9;Cf[i4+1]=qu;Cf[i4+2]=qz;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;q9+=2;
-
-    // Connect Bottom Turbine Cover And Fan Blade Cover;
-    z5=qg-2;Cf[i4]=qc;Cf[i4+1]=qc-1;Cf[i4+2]=qe;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qe;i4+=6;
-
-    ir=0;while(ir<ia-3)
-    {
-      if(id==qp-1&&ir==ia-3-qh+1)
-      {
-        Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qj;Cf[i4+5]=qc;
-        i4+=6;qc=qj;ir+=1;z5+=1
-      }
-      
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qc+1;Cf[i4+5]=qc;
-      z5+=1;qc+=1;i4+=6;ir+=1;
-    };
-    
-    if(id==qp-1){qz=q8+ij-1}else{qz=i0/3+ij-1}Cf[i4]=qc;Cf[i4+1]=qc+1;Cf[i4+2]=qz;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;qc+=2;
-
-    id+=1;
-  }
-  while(id<qp);
-
-  // Resizing & Movement;
-  let gx=0.5,g0,g1,g2,g3,g4,g5;let rty=0,rtx=0;r6=0.3;document.body.onmousedown=function(){document.body.requestPointerLock();document.body.onmousemove=move};document.onpointerlockchange=function(){if(!document.pointerLockElement){document.body.onmousemove=0}};
-  function move(e){kh.y-=e.movementX*0.007;kh.x=Math.max(kj-Math.PI,Math.min(kj,kh.x-e.movementY*0.007));camera.quaternion.setFromEuler(kh)}kh=new THREE.Euler(0,0,0,'YXZ');kj=Math.PI/2;
-
-  // Setup Renderer;
-  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.6,1200);camera.position.z=100;r0=new THREE.WebGLRenderer({antialias:true});r0.setClearColor("#000");document.body.appendChild(r0.domElement);r0.setPixelRatio(window.devicePixelRatio);
-  window.onresize=f0;function f0(){d0=window.innerWidth;d1=window.innerHeight;d2=d0/2,d3=d1/2;r0.setSize(d0,d1);camera.aspect=d0/d1;camera.updateProjectionMatrix()};f0();light=new THREE.PointLight(0xffffff,1);scene.add(light);
-
-  // Add Vertices And Triangles To Geometry;
-  geometry=new THREE.BufferGeometry();r4=[];i=b=0;while(b!=Cf.length){l0=Cf[b]*3;l1=Cf[b+1]*3;l2=Cf[b+2]*3;r4[i]=Cv[l0];r4[i+1]=Cv[l0+1];r4[i+2]=Cv[l0+2];r4[i+3]=Cv[l1];r4[i+4]=Cv[l1+1];r4[i+5]=Cv[l1+2];r4[i+6]=Cv[l2];r4[i+7]=Cv[l2+1];r4[i+8]=Cv[l2+2];i+=9;b+=3};
-  geometry.setAttribute('position',new THREE.Float32BufferAttribute(r4,3));geometry.computeVertexNormals();scene.add(new THREE.Mesh(geometry,new THREE.MeshPhongMaterial({side:THREE.DoubleSide,color:0xffffff})));
-
-  // Rendering;
-  function r3()
-  {
-    // Apply Camera Movement;
-    if(g0){camera.translateZ(-gx)}if(g1){camera.translateZ(gx)}if(g2){camera.translateX(-gx)}if(g3){camera.translateX(gx)}if(g4){camera.translateY(gx)}if(g5){camera.translateY(-gx)}
-    light.position.x=camera.position.x;light.position.y=camera.position.y;light.position.z=camera.position.z;
-
-    // Render;
-    r0.render(scene,camera);requestAnimationFrame(r3);
-  }
-
-  // Export Data To STL Function;
-  function r2()
-  {
-    cf=r4;i4=r4.length;j=new DataView(new ArrayBuffer(80+4+(50*i4/9)));j.setUint32(80,i4/9,1);z=84;
-
-    i=0;while(i<i4)
-    {
-      j.setFloat32(z+12,cf[i],1);j.setFloat32(z+16,cf[i+1],1);j.setFloat32(z+20,cf[i+2],1);
-      j.setFloat32(z+24,cf[i+3],1);j.setFloat32(z+28,cf[i+4],1);j.setFloat32(z+32,cf[i+5],1);
-      j.setFloat32(z+36,cf[i+6],1);j.setFloat32(z+40,cf[i+7],1);j.setFloat32(z+44,cf[i+8],1);
-
-      i+=9;z+=50;
-    }
-
-    a=document.createElement('a');a.href=url=URL.createObjectURL(new Blob([j],{type:'application/octet-stream'}));a.download='export.stl';a.click();URL.revokeObjectURL(url);
-  }
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=qc;Cf[i4+3]=z5+1;Cf[i4+4]=qc+1;Cf[i4+5]=qc;
+    z5+=1;qc+=1;i4+=6;ir+=1;
+  };
   
-  document.onkeydown=function(k){switch(k.code){case"ShiftLeft":{gx=1;break}case"KeyW":{g0=1;break}case"KeyS":{g1=1;break}case"KeyA":{g2=1;break}case"KeyD":{g3=1;break}case"KeyQ":{g4=1;break}case"KeyE":{g5=1;break}case"KeyP":{r2();break}}};
-  document.onkeyup=function(k){switch(k.code){case"ShiftLeft":{gx=0.5;break}case"KeyW":{g0=0;break}case"KeyS":{g1=0;break}case"KeyA":{g2=0;break}case"KeyD":{g3=0;break}case"KeyQ":{g4=0;break}case"KeyE":{g5=0;break}}};r3();
-</script></body></html>
+  if(id==qp-1){qz=q8+ij-1}else{qz=i0/3+ij-1}Cf[i4]=qc;Cf[i4+1]=qc+1;Cf[i4+2]=qz;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;qc+=2;
+
+  id+=1;
+}
+while(id<qp);
+</script>
+<script type="module">
+
+// Export Data To STL Function;
+function r2(cf)
+{
+  // Create DataView;
+  const l=cf.length,j=new DataView(new ArrayBuffer(80+4+(50*l/9)));j.setUint32(80,l/9,1);
+
+  let i=0,z=84,a;
+  
+  while(i<l)
+  {
+    j.setFloat32(z+12,cf[i],1);j.setFloat32(z+16,cf[i+1],1);j.setFloat32(z+20,cf[i+2],1);
+    j.setFloat32(z+24,cf[i+3],1);j.setFloat32(z+28,cf[i+4],1);j.setFloat32(z+32,cf[i+5],1);
+    j.setFloat32(z+36,cf[i+6],1);j.setFloat32(z+40,cf[i+7],1);j.setFloat32(z+44,cf[i+8],1);
+
+    i+=9;z+=50;
+  };
+
+  a=document.createElement('a');a.href=URL.createObjectURL(new Blob([j],{type:'application/octet-stream'}));a.download='export.stl';a.click();URL.revokeObjectURL(a.href);
+};
+
+// Compute Vertex Normals For Lighting;
+function cvn(v)
+{
+  const l=v.length,n=new Array(l);
+
+  // Define Variables;
+  let e0,e1,e2,e3,e4,e5,n0,n1,n2,i=0;
+
+  // For Every Face;
+  while(i<l)
+  {
+    // Get The Edges Of The Face;
+    e0=v[i+3]-v[i];
+    e1=v[i+4]-v[i+1];
+    e2=v[i+5]-v[i+2];
+
+    e3=v[i+6]-v[i];
+    e4=v[i+7]-v[i+1];
+    e5=v[i+8]-v[i+2];
+
+    // Use A Cross Product On The Edges;
+    n0=e1*e5-e2*e4;n1=e2*e3-e0*e5;n2=e0*e4-e1*e3;
+
+    // Normalize Normal Vector (0-1);
+    const l=Math.sqrt(n0*n0+n1*n1+n2*n2);
+
+    if(l>0)
+    {
+      n0/=l;n1/=l;n2/=l;
+    };
+
+    // Fill Normal Array;
+    n[i]=n[i+3]=n[i+6]=n0;n[i+1]=n[i+4]=n[i+7]=n1;n[i+2]=n[i+5]=n[i+8]=n2;
+
+    i+=9;
+  };
+
+  return n;
+};
+
+// Convert Indexed Geometry To Unindexed;
+let r4=[],i=0,b=0;
+
+while(b<Cf.length)
+{
+  const l0=Cf[b]*3,l1=Cf[b+1]*3,l2=Cf[b+2]*3;
+
+  r4[i]=Cv[l0];r4[i+1]=Cv[l0+1];r4[i+2]=Cv[l0+2];
+  r4[i+3]=Cv[l1];r4[i+4]=Cv[l1+1];r4[i+5]=Cv[l1+2];
+  r4[i+6]=Cv[l2];r4[i+7]=Cv[l2+1];r4[i+8]=Cv[l2+2];
+  
+  i+=9;b+=3;
+};
+
+// Load Model;
+const rt=cvn(r4),rsy=r4.length/3,rsi=r4.length+rt.length,rsx=new Float32Array(rsi);
+
+// Fill Array (Position 3, Normal 3);
+i=0;b=0;
+
+while(i<rsi)
+{
+  // Set Position & Normal;
+  rsx[i]=r4[b];rsx[i+1]=r4[b+1];rsx[i+2]=r4[b+2];rsx[i+3]=rt[b];rsx[i+4]=rt[b+1];rsx[i+5]=rt[b+2];
+
+  i+=6;b+=3;
+};
+
+// WebGPU Renderer;
+import * as mat4 from "./matrix-gl/mat4.js";
+
+// Define Uniform Buffer;
+const fbt=Float32Array.BYTES_PER_ELEMENT,fbs=fbt*36;
+let fub=new ArrayBuffer(fbs),projectionMatrix=new Float32Array(fub,0,16),viewMatrix=new Float32Array(fub,fbt*16,16),cameraPosition=new Float32Array(fub,fbt*32,3);
+
+// Define Matrices And Vectors;
+let viewMat=mat4.create(),cameraMat=mat4.create();
+
+// Create Canvas;
+const cnv=document.querySelector('canvas'),ctx=cnv.getContext('webgpu');
+
+// Set Canvas Dimensions;
+cnv.width=cnv.clientWidth*window.devicePixelRatio;
+cnv.height=cnv.clientHeight*window.devicePixelRatio;
+
+mat4.perspectiveZO(projectionMatrix,Math.PI*0.5,cnv.width/cnv.height,0.01,128);
+
+// Request WebGPU Adapter;
+const dev=await(await navigator.gpu.requestAdapter({featureLevel:"compatibility"})).requestDevice();
+const pformat=navigator.gpu.getPreferredCanvasFormat();ctx.configure({device:dev,format:pformat});
+
+// Create Vertex Buffer & Set It;
+const vxbuffer=dev.createBuffer({size:rsx.byteLength,usage:GPUBufferUsage.VERTEX,mappedAtCreation:true});
+new Float32Array(vxbuffer.getMappedRange()).set(rsx);vxbuffer.unmap();
+
+// Create Pipleline;
+const pipeline=dev.createRenderPipeline({
+  layout:'auto',
+  vertex:{
+    module:dev.createShaderModule({
+      code:`
+      struct Uniforms {
+        proj: mat4x4f,
+        view: mat4x4f,
+        position: vec3f
+      }
+      @binding(0) @group(0) var<uniform> camera : Uniforms;
+
+      struct VertexOutput {
+        @builtin(position) Position : vec4f,
+        @location(0) vNormal : vec3f,
+        @location(1) vPosition: vec3f,
+        @location(2) cPosition: vec3f
+      }
+
+      @vertex
+      fn main(@location(0) position : vec3f, @location(1) normal : vec3f) -> VertexOutput 
+      {
+        var output : VertexOutput;
+
+        output.vPosition = position;
+        output.vNormal = normal;
+
+        output.cPosition = camera.position;
+        output.Position = camera.proj * camera.view * vec4f(position, 1.0);
+
+        return output;
+      }`
+    }),
+    buffers:[
+      {
+        // Define ArrayStride (2 * 3) & Attributes (Position, Normal);
+        arrayStride:4*6,
+        attributes:[
+          {shaderLocation:0,offset:0,format:"float32x3"},
+          {shaderLocation:1,offset:4*3,format:"float32x3"}
+        ],
+      },
+    ],
+  },
+  fragment:{
+    module:dev.createShaderModule({
+      code:`
+      @fragment
+      fn main(@builtin(front_facing) frontFacing: bool, @location(0) vNormal: vec3f, @location(1) vPosition: vec3f, @location(2) cPosition: vec3f) -> @location(0) vec4f 
+      {
+        var nrml: vec3f;
+        if(frontFacing){nrml = vNormal;}else{nrml = -vNormal;}
+
+        return vec4f(vec3f(dot(nrml, normalize(cPosition - vPosition))), 1.0);
+      }
+      `
+    }),
+    targets:[{format:pformat}],
+  },
+  primitive:{
+    topology:'triangle-list',
+    cullMode:'none'
+  },
+  depthStencil:{
+    depthWriteEnabled:true,
+    depthCompare:'less-equal',
+    format:'depth24plus'
+  }
+});
+
+const depthTexture=dev.createTexture({size:[cnv.width,cnv.height],format:'depth24plus',usage:GPUTextureUsage.RENDER_ATTACHMENT}),
+frameUniformBuffer=dev.createBuffer({size:fbs,usage:GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST});
+
+const uniformBindGroup=dev.createBindGroup({
+  layout: pipeline.getBindGroupLayout(0),
+  entries:[
+    {
+      binding:0,
+      resource:{
+        buffer:frameUniformBuffer,
+      }
+    }
+  ]
+});
+
+const renderPassDescriptor={
+  colorAttachments:[
+    {
+      clearValue:[0,0,0,1],
+      loadOp:'clear',
+      storeOp:'store'
+    },
+  ],
+  depthStencilAttachment:{
+    view: depthTexture.createView(),
+    depthClearValue: 1,
+    depthLoadOp:'clear',
+    depthStoreOp:'store'
+  }
+};
+
+// Key Variables;
+let kw=0,ks=0,ka=0,kd=0,kq=0,ke=0,px=0,py=0,pz=70;
+
+// Handle Key Events;
+window.onkeydown=function(e)
+{
+  switch(e.code)
+  {
+    case "KeyW":{kw=cln=1;break;}
+    case "KeyS":{ks=cln=1;break;}
+    case "KeyA":{ka=cln=1;break;}
+    case "KeyD":{kd=cln=1;break;}
+    case "KeyQ":{kq=cln=1;break;}
+    case "KeyE":{ke=cln=1;break;}
+    case "KeyP":{r2(r4);break;}
+  };
+};
+
+window.onkeyup=function(e)
+{
+  switch(e.code)
+  {
+    case "KeyW":{kw=0;break;}
+    case "KeyS":{ks=0;break;}
+    case "KeyA":{ka=0;break;}
+    case "KeyD":{kd=0;break;}
+    case "KeyQ":{kq=0;break;}
+    case "KeyE":{ke=0;break;}
+  };
+};
+
+// Mouse Variables;
+let obx=0,oby=0,mov=0,cln=1,lax,lay;
+
+cnv.onmousedown=function()
+{
+  if(event.buttons==1) 
+  {
+    mov=1;
+  };
+
+  lax=event.pageX;lay=event.pageY;
+};
+
+cnv.onmouseup=function(){mov=0;};
+
+cnv.onpointermove=function(e)
+{
+  let xDelta,yDelta;
+
+  if(mov)
+  {
+    xDelta=e.pageX-lax;
+    yDelta=e.pageY-lay;
+
+    lax=e.pageX;lay=e.pageY;
+
+    oby+=xDelta*0.025;obx+=yDelta*0.025;
+    cln=1;
+  };
+};
+
+cnv.onmousewheel=function(e)
+{
+  let d=e.deltaY/10*0.155;
+  px+=cameraMat[8]*d;py+=cameraMat[9]*d;pz+=cameraMat[10]*d;
+
+  e.preventDefault();cln=1;
+};
+
+function getTransformationMatrix() 
+{
+  if(cln) 
+  {
+    let d=0.45,mv;cln=0;
+
+    // Apply Positional Camera Movement;
+    if(kw)
+    {
+      px-=cameraMat[8]*d;py-=cameraMat[9]*d;pz-=cameraMat[10]*d;
+      cln=1;
+    }
+    else if(ks)
+    {
+      px+=cameraMat[8]*d;py+=cameraMat[9]*d;pz+=cameraMat[10]*d;
+      cln=1;
+    };
+
+    if(ka)
+    {
+      px-=cameraMat[0]*d;py-=cameraMat[1]*d;pz-=cameraMat[2]*d;
+      cln=1;
+    }
+    else if(kd)
+    {
+      px+=cameraMat[0]*d;py+=cameraMat[1]*d;pz+=cameraMat[2]*d;
+      cln=1;
+    };
+    
+    if(kq)
+    {
+      px+=cameraMat[4]*d;py+=cameraMat[5]*d;pz+=cameraMat[6]*d;
+      cln=1;
+    }
+    else if(ke)
+    {
+      px-=cameraMat[4]*d;py-=cameraMat[5]*d;pz-=cameraMat[6]*d;
+      cln=1;
+    };
+
+    mv=cameraMat;
+
+    mat4.identity(mv);    
+    mat4.translate(mv,mv,[px,py,pz]);
+    mat4.rotateY(mv,mv,-oby);
+    mat4.rotateX(mv,mv,-obx);
+    mat4.rotateZ(mv,mv,0);
+
+    mat4.invert(viewMat, cameraMat);
+  };
+};
+
+function frame()
+{
+  if(cln)
+  {
+    // Update Uniforms And Write Them;
+    getTransformationMatrix();viewMatrix.set(viewMat);cameraPosition.set([px,py,pz]);
+    dev.queue.writeBuffer(frameUniformBuffer,0,fub);
+
+    // Set RenderPass;
+    renderPassDescriptor.colorAttachments[0].view=ctx.getCurrentTexture().createView();
+
+    // Create Encoder;
+    const commandEncoder=dev.createCommandEncoder(),passEncoder=commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipeline);passEncoder.setBindGroup(0,uniformBindGroup);passEncoder.setVertexBuffer(0,vxbuffer);passEncoder.draw(rsy);passEncoder.end();
+
+    dev.queue.submit([commandEncoder.finish()]);
+  };
+
+  requestAnimationFrame(frame);
+};
+
+frame();
+</script>
+</body>
+</html>
