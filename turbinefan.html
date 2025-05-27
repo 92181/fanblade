@@ -56,14 +56,14 @@ z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
 {
   ir=0;do
   {
-    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=z5+1;Cf[i4+4]=i2+1;Cf[i4+5]=i2;}
     z5+=1;i2+=1;i4+=6;ir+=1;
   }
   while(ir<ix);id+=1;
 }
 while(id<ik-1);i4-=3;
 
-ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=i2;Cf[i4+1]=z5;Cf[i4+2]=q2;i4+=3;
 
 // Bottom Turbine Cover;
 x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=0;ik=2;i6=i0/3;
@@ -82,11 +82,13 @@ while(id<ik)
 
 qj=qc=i0/3-ix;qc+=qh;
 
-z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+z5=i6;i2=z5+ix;id=1;Cf[i4]=i2;Cf[i4+1]=z5;Cf[i4+2]=i2-1;i4+=3;
+
+do
 {
   ir=0;do
   {
-    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    Cf[i4]=z5+1;Cf[i4+1]=z5;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=z5+1;Cf[i4+4]=i2;Cf[i4+5]=i2+1;}
     z5+=1;i2+=1;i4+=6;ir+=1;
   }
   while(ir<ix);id+=1;
@@ -96,11 +98,12 @@ while(id<ik-1);i4-=3;
 // Connect Inner Turbine Cover And Bottom;
 z3=qv;z4=i6;ir=0;while(ir<ix-1)
 {
-  Cf[i4]=z3;Cf[i4+1]=z4+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+1;
+  Cf[i4]=z4;Cf[i4+1]=z4+1;Cf[i4+2]=z3;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+1;
+
   z3+=1;z4+=1;i4+=6;ir+=1;
 };
 
-Cf[i4]=z3;Cf[i4+1]=i6;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=i6;Cf[i4+5]=qv;i4+=6;
+Cf[i4]=z4;Cf[i4+1]=i6;Cf[i4+2]=z3;Cf[i4+3]=z3;Cf[i4+4]=i6;Cf[i4+5]=qv;i4+=6;
 
 // Top Turbine Cover;
 x0=0;y0=1.125;x1=0.125;y1=0.625;x2=0.5;y2=0.125;x3=1;y3=0;id=1;ik=15;ix=(ia-2)*qp+qp;i6=qi=q9=i0/3;q9+=1;
@@ -122,11 +125,13 @@ while(id<ik);
 Cv[i0]=Cv[i0+1]=0;Cv[i0+2]=qf;i0+=3;
 
 // Create Turbine Ring Top Surfaces;
-z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
+z5=i6;i2=z5+ix;id=1;Cf[i4]=i2;Cf[i4+1]=z5;Cf[i4+2]=i2-1;i4+=3;
+
+do
 {
   ir=0;do
   {
-    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
+    Cf[i4]=i2;Cf[i4+1]=z5+1;Cf[i4+2]=z5;if(ir==ix-1&&id==ik-2){}else{Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;}
     z5+=1;i2+=1;i4+=6;ir+=1;
   }
   while(ir<ix);id+=1;
@@ -134,7 +139,15 @@ z5=i6;i2=z5+ix;id=1;Cf[i4]=i2-1;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;do
 while(id<ik-1);i4-=3;
 
 // Top Outer Turbine Cover (Close Top With 1 Point);
-ir=0;q2=z5;while(ir<ix-1){Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;z5+=1;i4+=3;ir+=1};Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
+ir=0;q2=z5;
+
+while(ir<ix-1)
+{
+  Cf[i4]=i2;Cf[i4+1]=z5+1;Cf[i4+2]=z5;
+  z5+=1;i4+=3;ir+=1
+};
+
+Cf[i4]=q2;Cf[i4+1]=z5;Cf[i4+2]=i2;i4+=3;
 
 // Turbine Blades;
 q8=i0/3;id=0;ix=qm;do
@@ -172,7 +185,7 @@ q8=i0/3;id=0;ix=qm;do
   {
     i7=i4+(ij-1)*6;do
     {
-      Cf[i4]=z0;Cf[i4+1]=z0+1;Cf[i4+2]=z1;Cf[i4+3]=z1;Cf[i4+4]=z0+1;Cf[i4+5]=z1+1;
+      Cf[i4]=z1;Cf[i4+1]=z0+1;Cf[i4+2]=z0;Cf[i4+3]=z1+1;Cf[i4+4]=z0+1;Cf[i4+5]=z1;
       i4+=6;z0+=1;z1+=1;
     }
     while(i4<i7);
@@ -232,11 +245,11 @@ q8=i0/3;id=0;ix=qm;do
   ir=0;do
   {
     // Connect Frontside;
-    Cf[i4]=z0;Cf[i4+1]=z0+ih;Cf[i4+2]=i8;Cf[i4+3]=i8;Cf[i4+4]=i8+i9;Cf[i4+5]=z0+ih;
+    Cf[i4]=z0;Cf[i4+1]=z0+ih;Cf[i4+2]=i8;Cf[i4+3]=z0+ih;Cf[i4+4]=i8+i9;Cf[i4+5]=i8;
     z0+=ih;i8+=i9;i4+=6;
 
     // Connect Backside;
-    Cf[i4]=z1;Cf[i4+1]=z1+ih;Cf[i4+2]=z2;Cf[i4+3]=z1+ih;Cf[i4+4]=z2;Cf[i4+5]=z2+i9; 
+    Cf[i4]=z2;Cf[i4+1]=z1+ih;Cf[i4+2]=z1;Cf[i4+3]=z1+ih;Cf[i4+4]=z2;Cf[i4+5]=z2+i9;
     z1+=ih;z2+=i9;i4+=6;ir+=1;
   }
   while(ir<ix-2);
@@ -244,12 +257,12 @@ q8=i0/3;id=0;ix=qm;do
   // Connect Mainside & Corners;
   z3=i8+ih*ix+3;z4=i6+i9*(ix-1);
 
-  Cf[i4]=z4+1;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z4-i9;Cf[i4+4]=z3+1;Cf[i4+5]=z4;i4+=6;
-  Cf[i4]=z4-1;Cf[i4+1]=z3+ih;Cf[i4+2]=z4+i9-1;Cf[i4+3]=z4+i9-2;Cf[i4+4]=z3+ih;Cf[i4+5]=z4+i9-1;i4+=6;
+  Cf[i4]=z4;Cf[i4+1]=z3+1;Cf[i4+2]=z4+1;Cf[i4+3]=z4-i9;Cf[i4+4]=z3+1;Cf[i4+5]=z4;i4+=6;
+  Cf[i4]=z4+i9-1;Cf[i4+1]=z3+ih;Cf[i4+2]=z4-1;Cf[i4+3]=z4+i9-2;Cf[i4+4]=z3+ih;Cf[i4+5]=z4+i9-1;i4+=6;
 
   z3+=1;z4+=1;ir=0;while(ir<i9-3)
   {
-    Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+1;
+    Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z4+1;Cf[i4+4]=z4;Cf[i4+5]=z3+1;
     z3+=1;z4+=1;i4+=6;ir+=1;
   };
 
@@ -282,7 +295,7 @@ q8=i0/3;id=0;ix=qm;do
   {
     ir=1;do
     {
-      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;Cf[i4+3]=i2;Cf[i4+4]=i2+1;Cf[i4+5]=z5+1;
+      Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=i2;Cf[i4+3]=z5+1;Cf[i4+4]=i2+1;Cf[i4+5]=i2;
       z5+=1;i2+=1;i4+=6;ir+=1;
     }
     while(ir<ia-2);q0+=1;z5+=1;i2+=1;
@@ -290,38 +303,46 @@ q8=i0/3;id=0;ix=qm;do
   while(q0<ij-1);
 
   // Connect Outer Turbine Ring (Left);
-  z3=im/3;z4=i6/3;Cf[i4]=z3;Cf[i4+1]=q3;Cf[i4+2]=z4;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;z4+=ia-2;
+  z3=im/3;z4=i6/3;
+  
+  Cf[i4]=z3;Cf[i4+1]=q3;Cf[i4+2]=z4;Cf[i4+3]=z4;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z3;i4+=6;
+
+  z4+=ia-2;
 
   ir=0;while(ir<ij-3)
   {
-    Cf[i4]=z3;Cf[i4+1]=z3+1;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+ia-2;
+    Cf[i4]=z4;Cf[i4+1]=z3+1;Cf[i4+2]=z3;Cf[i4+3]=z3+1;Cf[i4+4]=z4;Cf[i4+5]=z4+ia-2;
+
     z3+=1;z4+=ia-2;i4+=6;ir+=1;
   };
 
-  Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=q3+ij-1;Cf[i4+3]=z3;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z4;i4+=6;
+  Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=q3+ij-1;Cf[i4+3]=z4;Cf[i4+4]=z4+ia-2;Cf[i4+5]=z3;i4+=6;
 
   // Connect Outer Turbine Ring (Right);
   z3=z5+ia-2;z4=i6/3+ia-3;if(id==qp-1){z3=q8}
 
   ir=0;while(ir<ij-1)
   {
-    Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=z4;Cf[i4+3]=z3+1;Cf[i4+4]=z3;Cf[i4+5]=z4+ia-2;
+    Cf[i4]=z3;Cf[i4+1]=z4+ia-2;Cf[i4+2]=z4;Cf[i4+3]=z4+ia-2;Cf[i4+4]=z3;Cf[i4+5]=z3+1;
+
     z3+=1;z4+=ia-2;i4+=6;ir+=1;
   };
 
   // Connect Top Turbine Cover And Fan Blade Cover;
-  z5=q7/3;Cf[i4]=q9;Cf[i4+1]=q9-1;Cf[i4+2]=qx;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qx;i4+=6;
+  z5=q7/3;
+  
+  Cf[i4]=qx;Cf[i4+1]=q9-1;Cf[i4+2]=q9;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qx;i4+=6;
 
   ir=0;while(ir<ia-3)
   {
-    Cf[i4]=z5;Cf[i4+1]=z5+1;Cf[i4+2]=q9;Cf[i4+3]=z5+1;Cf[i4+4]=q9+1;Cf[i4+5]=q9;
+    Cf[i4]=q9;Cf[i4+1]=z5+1;Cf[i4+2]=z5;Cf[i4+3]=q9;Cf[i4+4]=q9+1;Cf[i4+5]=z5+1;
     z5+=1;q9+=1;i4+=6;ir+=1;
   };
 
-  if(id==qp-1){qz=q8;qu=qi;}else{qz=i0/3;qu=q9+1;}Cf[i4]=q9;Cf[i4+1]=qu;Cf[i4+2]=qz;Cf[i4+3]=q9;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;q9+=2;
+  if(id==qp-1){qz=q8;qu=qi;}else{qz=i0/3;qu=q9+1;}Cf[i4]=q9;Cf[i4+1]=qu;Cf[i4+2]=qz;Cf[i4+3]=qz;Cf[i4+4]=z5;Cf[i4+5]=q9;i4+=6;q9+=2;
 
   // Connect Bottom Turbine Cover And Fan Blade Cover;
-  z5=qg-2;Cf[i4]=qc;Cf[i4+1]=qc-1;Cf[i4+2]=qe;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qe;i4+=6;
+  z5=qg-2;Cf[i4]=qc;Cf[i4+1]=qc-1;Cf[i4+2]=qe;Cf[i4+3]=qe;Cf[i4+4]=z5;Cf[i4+5]=qc;i4+=6;
 
   ir=0;while(ir<ia-3)
   {
@@ -335,9 +356,9 @@ q8=i0/3;id=0;ix=qm;do
     z5+=1;qc+=1;i4+=6;ir+=1;
   };
   
-  if(id==qp-1){qz=q8+ij-1}else{qz=i0/3+ij-1}Cf[i4]=qc;Cf[i4+1]=qc+1;Cf[i4+2]=qz;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;qc+=2;
+  if(id==qp-1){qz=q8+ij-1}else{qz=i0/3+ij-1}Cf[i4]=qz;Cf[i4+1]=qc+1;Cf[i4+2]=qc;Cf[i4+3]=qc;Cf[i4+4]=z5;Cf[i4+5]=qz;i4+=6;
 
-  id+=1;
+  id+=1;qc+=2;
 }
 while(id<qp);
 </script>
@@ -510,7 +531,7 @@ const pipeline=dev.createRenderPipeline({
       fn main(@builtin(front_facing) frontFacing: bool, @location(0) vNormal: vec3f, @location(1) vPosition: vec3f, @location(2) cPosition: vec3f) -> @location(0) vec4f 
       {
         var nrml: vec3f;
-        if(frontFacing){nrml = vNormal;}else{nrml = -vNormal;}
+        nrml = vNormal;
 
         return vec4f(vec3f(dot(nrml, normalize(cPosition - vPosition))), 1.0);
       }
